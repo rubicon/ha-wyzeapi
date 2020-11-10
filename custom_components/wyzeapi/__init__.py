@@ -12,7 +12,7 @@ from wyzeapi.client import WyzeApiClient
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = 'ha-wyzeapi'
+DOMAIN = 'wyzeapi'
 CONF_SENSORS = "sensors"
 CONF_LIGHT = "light"
 CONF_SWITCH = "switch"

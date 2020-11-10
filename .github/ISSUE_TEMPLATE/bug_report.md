@@ -26,7 +26,7 @@ HA Version: <!-- v0.103.0 -->
 WyzeApi Version: <!-- v0.4.0 --> 
 
 **configuration.yaml**
-<!-- The config you are using to enable ha-wyzeapi -->
+<!-- The config you are using to enable wyzeapi -->
 ```yaml
 <YOUR CONFIG HERE>
 ```
@@ -37,7 +37,7 @@ Ensure that your logger is set up by adding this to your configuration.yaml
 logger:
   default: warning
   logs:
-    custom_components.ha-wyzeapi: debug
+    custom_components.wyzeapi: debug
 
 For additional information see the readme: https://github.com/JoshuaMulliken/ha-wyzeapi#reporting-an-issue
 -->
