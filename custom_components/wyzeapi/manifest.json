@@ -6,6 +6,6 @@
   "codeowners": [
     "@joshuamulliken"
   ],
-  "requirements": ["wyzeapi"],
+  "requirements": ["wyzeapy"],
   "icons": []
 }
