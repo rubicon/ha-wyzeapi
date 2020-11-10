@@ -3,7 +3,6 @@
 """Platform for light integration."""
 import asyncio
 import logging
-from datetime import timedelta
 # Import the device class from the component that you want to support
 from typing import Any
 
@@ -17,8 +16,8 @@ from homeassistant.components.light import (
 from homeassistant.const import ATTR_ATTRIBUTION
 
 from . import DOMAIN
-from .wyzeapi.client import WyzeApiClient
-from .wyzeapi.devices import Bulb
+from wyzeapi.client import WyzeApiClient
+from wyzeapi.devices import Bulb
 
 _LOGGER = logging.getLogger(__name__)
 ATTRIBUTION = "Data provided by Wyze"

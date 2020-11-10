@@ -8,11 +8,11 @@ from homeassistant.const import (
     CONF_PASSWORD, CONF_USERNAME)
 from homeassistant.helpers import discovery
 
-from .wyzeapi.client import WyzeApiClient
+from wyzeapi.client import WyzeApiClient
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = 'wyzeapi'
+DOMAIN = 'ha-wyzeapi'
 CONF_SENSORS = "sensors"
 CONF_LIGHT = "light"
 CONF_SWITCH = "switch"
