@@ -14,8 +14,8 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.const import ATTR_ATTRIBUTION, ATTR_BATTERY_LEVEL
 
 from . import DOMAIN
-from wyzeapi.client import WyzeApiClient
-from wyzeapi.devices import MotionSensor, ContactSensor
+from wyzeapy.client import WyzeApiClient
+from wyzeapy.devices import MotionSensor, ContactSensor
 
 # Add to support quicker update time. Is this to Fast?
 

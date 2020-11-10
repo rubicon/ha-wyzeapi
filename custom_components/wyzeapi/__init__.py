@@ -8,7 +8,7 @@ from homeassistant.const import (
     CONF_PASSWORD, CONF_USERNAME)
 from homeassistant.helpers import discovery
 
-from wyzeapi.client import WyzeApiClient
+from wyzeapy.client import WyzeApiClient
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -9,8 +9,8 @@ from homeassistant.components.lock import LockEntity
 from homeassistant.const import ATTR_ATTRIBUTION
 
 from . import DOMAIN
-from wyzeapi.client import WyzeApiClient
-from wyzeapi.devices import Lock
+from wyzeapy.client import WyzeApiClient
+from wyzeapy.devices import Lock
 
 # Add to support quicker update time. Is this too Fast?
 SCAN_INTERVAL = timedelta(seconds=5)
