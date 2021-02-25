@@ -14,9 +14,9 @@ from homeassistant.components.vacuum import (
 )
 
 from . import DOMAIN
-from smartbridge.providers.wyze import WyzeProvider
-from smartbridge.providers.wyze.devices import WyzeVacuum
-from smartbridge.interfaces.devices import VacuumMode
+from .smartbridge.providers.wyze import WyzeProvider
+from .smartbridge.providers.wyze.devices import WyzeVacuum
+from .smartbridge.interfaces.devices import VacuumMode
 
 _LOGGER = logging.getLogger(__name__)
 

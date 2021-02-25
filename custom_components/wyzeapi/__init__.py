@@ -1,8 +1,8 @@
 """Wyze Bulb/Switch integration."""
 
 import logging
-import smartbridge
-from smartbridge.factory import ProviderFactory, ProviderList
+from . import smartbridge
+from .smartbridge.factory import ProviderFactory, ProviderList
 import uuid
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
