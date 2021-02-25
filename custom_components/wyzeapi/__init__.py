@@ -1,7 +1,9 @@
 """Wyze Bulb/Switch integration."""
 
 import logging
-
+import smartbridge
+from smartbridge.factory import ProviderFactory, ProviderList
+import uuid
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.const import (
@@ -46,6 +48,30 @@ https://github.com/JoshuaMulliken/ha-wyzeapi/issues
     wyzeapi_account: WyzeApiClient = WyzeApiClient()
     await wyzeapi_account.login(config[DOMAIN].get(CONF_USERNAME), config[DOMAIN].get(CONF_PASSWORD))
 
+    ############################################################
+    # wyze provider
+    ############################################################
+    # // create provider (all of these values are optional, as they
+    # are the same as the defaults that will be used)
+    client_cfg = {
+        'wyze_app_id': '9319141212m2ik',
+        'wyze_app_name': 'wyze',
+        'wyze_app_version': '2.16.55',
+        'wyze_phone_id': str(uuid.uuid4()),
+    }
+
+    # login
+    smartbridge.set_stream_logger('smartbridge', logging.DEBUG)
+    login_response = ProviderFactory().create_provider(ProviderList.WYZE, client_cfg).wyze_client.login(
+        config[DOMAIN].get(CONF_USERNAME), config[DOMAIN].get(CONF_PASSWORD))
+
+    client_cfg['access_token'] = login_response['access_token']
+    client_cfg['refresh_token'] = login_response['refresh_token']
+    client_cfg['user_id'] = login_response['user_id']
+
+    wyzeapi_provider = ProviderFactory().create_provider(ProviderList.WYZE, client_cfg)
+    smartbridge.set_stream_logger('smartbridge', logging.INFO)
+
     sensor_support = config[DOMAIN].get(CONF_SENSORS)
     light_support = config[DOMAIN].get(CONF_LIGHT)
     switch_support = config[DOMAIN].get(CONF_SWITCH)
@@ -60,7 +86,8 @@ https://github.com/JoshuaMulliken/ha-wyzeapi/issues
 
     # Store the logged in account object for the platforms to use.
     hass.data[DOMAIN] = {
-        "wyzeapi_account": wyzeapi_account
+        "wyzeapi_account": wyzeapi_account,
+        "wyzeapi_provider": wyzeapi_provider
     }
 
     # Start up lights and switch components
@@ -79,6 +106,7 @@ https://github.com/JoshuaMulliken/ha-wyzeapi/issues
         _LOGGER.debug("Starting WyzeApi lock")
     if vacuum_support:
         discovery.load_platform(hass, "vacuum", DOMAIN, {}, config)
+        _LOGGER.debug("Starting WyzeApi vacuum")
     else:
         _LOGGER.error("WyzeApi authenticated but could not find any devices.")
 
