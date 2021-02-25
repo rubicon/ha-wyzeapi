@@ -2,21 +2,17 @@
 Base implementation for data objects exposed through a provider or service
 """
 
-from abc import abstractmethod
 import inspect
 import logging
-import re
 
-from smartbridge.interfaces.devices import Configuration
-from smartbridge.interfaces.devices import Device
-from smartbridge.interfaces.devices import NetworkedDevice
-from smartbridge.interfaces.devices import Sensor
-from smartbridge.interfaces.devices import ContactSensor
-from smartbridge.interfaces.devices import MotionSensor
-from smartbridge.interfaces.devices import Bulb
-from smartbridge.interfaces.devices import Plug
-from smartbridge.interfaces.devices import SwitchableDevice
-from smartbridge.interfaces.devices import Vacuum
+from ..interfaces.devices import Bulb
+from ..interfaces.devices import ContactSensor
+from ..interfaces.devices import Device
+from ..interfaces.devices import MotionSensor
+from ..interfaces.devices import NetworkedDevice
+from ..interfaces.devices import Plug
+from ..interfaces.devices import SwitchableDevice
+from ..interfaces.devices import Vacuum
 
 log = logging.getLogger(__name__)
 

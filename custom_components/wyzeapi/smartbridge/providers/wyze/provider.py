@@ -4,8 +4,8 @@ import uuid
 
 import requests
 
-from smartbridge.base import BaseProvider
-from smartbridge.base.helpers import get_env
+from ...base import BaseProvider
+from ...base.helpers import get_env
 
 from .client import WyzeClient
 

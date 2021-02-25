@@ -4,8 +4,8 @@ import logging
 import pkgutil
 from collections import defaultdict
 
-from smartbridge import providers
-from smartbridge.interfaces import Provider
+from . import providers
+from .interfaces import Provider
 
 
 log = logging.getLogger(__name__)
@@ -150,10 +150,6 @@ class ProviderFactory(object):
         """
         all_providers = []
         for impl in self.list_providers().values():
-            if ignore_mocks:
-                if not issubclass(impl["class"], TestMockHelperMixin):
-                    all_providers.append(impl["class"])
-            else:
-                all_providers.append(impl["class"])
+            all_providers.append(impl["class"])
         log.info("List of provider classes: %s", all_providers)
         return all_providers

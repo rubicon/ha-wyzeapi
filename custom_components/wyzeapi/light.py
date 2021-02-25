@@ -3,7 +3,6 @@
 """Platform for light integration."""
 import asyncio
 import logging
-from datetime import timedelta
 # Import the device class from the component that you want to support
 from typing import Any
 

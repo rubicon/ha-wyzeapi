@@ -1,11 +1,11 @@
 import logging
-from smartbridge.interfaces.devices import VacuumSuction
+from ...interfaces.devices import VacuumSuction
 
-from smartbridge.base.services import BaseSessionService
-from smartbridge.base.services import BaseBulbService
-from smartbridge.base.services import BasePlugService
-from smartbridge.base.services import BaseVacuumService
-from smartbridge.interfaces.exceptions import ProviderConnectionException, InvalidValueException
+from ...base.services import BaseSessionService
+from ...base.services import BaseBulbService
+from ...base.services import BasePlugService
+from ...base.services import BaseVacuumService
+from ...interfaces.exceptions import ProviderConnectionException, InvalidValueException
 
 from .devices import WyzeBulb
 from .devices import WyzePlug

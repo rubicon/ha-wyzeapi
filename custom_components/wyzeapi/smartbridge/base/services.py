@@ -3,13 +3,13 @@ Base implementation for services available through a provider
 """
 import logging
 
-from smartbridge.interfaces.services import ProviderService
-from smartbridge.interfaces.services import SessionService
-from smartbridge.interfaces.services import DeviceService
-from smartbridge.interfaces.services import SwitchableDeviceService
-from smartbridge.interfaces.services import BulbService
-from smartbridge.interfaces.services import VacuumService
-from smartbridge.interfaces.services import PlugService
+from ..interfaces.services import ProviderService
+from ..interfaces.services import SessionService
+from ..interfaces.services import DeviceService
+from ..interfaces.services import SwitchableDeviceService
+from ..interfaces.services import BulbService
+from ..interfaces.services import VacuumService
+from ..interfaces.services import PlugService
 
 log = logging.getLogger(__name__)
 

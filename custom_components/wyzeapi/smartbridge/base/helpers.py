@@ -1,7 +1,6 @@
 import os
 import time
 from hashlib import md5
-import hmac
 
 
 def _flat(f, xs): return [y for ys in xs for y in f(ys)]

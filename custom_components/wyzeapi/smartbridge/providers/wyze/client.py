@@ -1,19 +1,16 @@
-import datetime
-import logging
-import time
-from hashlib import md5
-from collections import OrderedDict
 import hmac
 import json
+import logging
+import time
 from abc import ABCMeta
 from abc import abstractmethod
-from abc import abstractproperty
+from hashlib import md5
 
 import requests
 
-from smartbridge.base.helpers import md5_string
-from smartbridge.interfaces.exceptions import ProviderInternalException, ProviderConnectionException
 from .devices import DeviceModels
+from ...base.helpers import md5_string
+from ...interfaces.exceptions import ProviderInternalException, ProviderConnectionException
 
 log = logging.getLogger(__name__)
 
@@ -234,8 +231,8 @@ class WyzeServiceClient(object):
             session: requests.Session,
             request: requests.Request):
         try:
-            log.trace('request')
-            log.trace(request.headers)
+            log.debug('request')
+            log.debug(request.headers)
 
             settings = session.merge_environment_settings(
                 request.url, {}, None, None, None)
@@ -247,16 +244,16 @@ class WyzeServiceClient(object):
                 request.url)
             response = session.send(request, **settings)
 
-            log.trace('response')
-            log.trace(response)
+            log.debug('response')
+            log.debug(response)
 
             response.raise_for_status()
 
             # Code here will only run if the request is successful
             response_json = response.json()
 
-            log.trace('parsed response JSON')
-            log.trace(response_json)
+            log.debug('parsed response JSON')
+            log.debug(response_json)
 
             if 'code' in response_json:
                 response_code = response_json['code']

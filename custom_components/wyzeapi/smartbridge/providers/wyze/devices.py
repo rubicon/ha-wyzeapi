@@ -2,22 +2,21 @@
 DataTypes used by this provider
 """
 
-from abc import abstractmethod
 import logging
+from abc import abstractmethod
 
+from ...base.devices import BaseBulb
+from ...base.devices import BaseContactSensor
+from ...base.devices import BaseDevice
+from ...base.devices import BaseMotionSensor
+from ...base.devices import BaseNetworkedDevice
+from ...base.devices import BasePlug
+from ...base.devices import BaseSensor
+from ...base.devices import BaseSwitchableDevice
+from ...base.devices import BaseVacuum
 from ...interfaces.devices import VacuumMode
 from ...interfaces.devices import VacuumSuction
 from ...interfaces.exceptions import InvalidParamException, InvalidValueException
-from ...base.devices import BaseDevice
-from ...base.devices import BaseNetworkedDevice
-from ...base.devices import BaseSwitchableDevice
-from ...base.devices import BaseBulb
-from ...base.devices import BasePlug
-from ...base.devices import BaseVacuum
-from ...base.devices import BaseSensor
-from ...base.devices import BaseMotionSensor
-from ...base.devices import BaseContactSensor
-from enum import Enum
 
 log = logging.getLogger(__name__)
 
