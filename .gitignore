@@ -137,3 +137,6 @@ dmypy.json
 # Secrets
 secrets.py
 wyzeconfig.ini
+
+# Pycharm Files
+.idea/*

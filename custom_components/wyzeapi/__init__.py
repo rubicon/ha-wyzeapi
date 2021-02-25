@@ -17,6 +17,7 @@ CONF_SENSORS = "sensors"
 CONF_LIGHT = "light"
 CONF_SWITCH = "switch"
 CONF_LOCK = "lock"
+CONF_VACUUM = "vacuum"
 
 CONFIG_SCHEMA = vol.Schema({
     DOMAIN: vol.Schema({
@@ -28,7 +29,6 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_LOCK, default=True): cv.boolean
     })
 }, extra=vol.ALLOW_EXTRA)
-
 
 async def async_setup(hass, config):
     """Set up the WyzeApi parent component."""
@@ -50,6 +50,7 @@ https://github.com/JoshuaMulliken/ha-wyzeapi/issues
     light_support = config[DOMAIN].get(CONF_LIGHT)
     switch_support = config[DOMAIN].get(CONF_SWITCH)
     lock_support = config[DOMAIN].get(CONF_LOCK)
+    vacuum_support = config[DOMAIN].get(CONF_VACUUM)
 
     if not await wyzeapi_account.is_logged_in():
         _LOGGER.error("Not connected to Wyze account. Unable to add devices. Check your configuration.")
@@ -76,6 +77,8 @@ https://github.com/JoshuaMulliken/ha-wyzeapi/issues
     if lock_support:
         await discovery.async_load_platform(hass, "lock", DOMAIN, {}, config)
         _LOGGER.debug("Starting WyzeApi lock")
+    if vacuum_support:
+        discovery.load_platform(hass, "vacuum", DOMAIN, {}, config)
     else:
         _LOGGER.error("WyzeApi authenticated but could not find any devices.")
 
