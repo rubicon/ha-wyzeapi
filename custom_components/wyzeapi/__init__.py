@@ -33,6 +33,7 @@ CONFIG_SCHEMA = vol.Schema({
     })
 }, extra=vol.ALLOW_EXTRA)
 
+
 async def async_setup(hass, config):
     """Set up the WyzeApi parent component."""
     _LOGGER.debug("""
@@ -107,11 +108,10 @@ https://github.com/JoshuaMulliken/ha-wyzeapi/issues
         _LOGGER.debug("Starting WyzeApi lock")
     if vacuum_support:
         loop = asyncio.get_event_loop()
-        await loop.run_in_executor(discovery.load_platform(hass, "vacuum", DOMAIN, {}, config))
+        func = lambda: discovery.load_platform(hass, "vacuum", DOMAIN, {}, config)
+        await loop.run_in_executor(None, func)
         _LOGGER.debug("Starting WyzeApi vacuum")
     else:
         _LOGGER.error("WyzeApi authenticated but could not find any devices.")
 
     return True
-
-
