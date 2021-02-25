@@ -1,5 +1,5 @@
 """Wyze Bulb/Switch integration."""
-
+import asyncio
 import logging
 from . import smartbridge
 from .smartbridge.factory import ProviderFactory, ProviderList
@@ -28,7 +28,8 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_SENSORS, default=True): cv.boolean,
         vol.Optional(CONF_LIGHT, default=True): cv.boolean,
         vol.Optional(CONF_SWITCH, default=True): cv.boolean,
-        vol.Optional(CONF_LOCK, default=True): cv.boolean
+        vol.Optional(CONF_LOCK, default=True): cv.boolean,
+        vol.Optional(CONF_VACUUM, default=True): cv.boolean
     })
 }, extra=vol.ALLOW_EXTRA)
 
@@ -105,9 +106,12 @@ https://github.com/JoshuaMulliken/ha-wyzeapi/issues
         await discovery.async_load_platform(hass, "lock", DOMAIN, {}, config)
         _LOGGER.debug("Starting WyzeApi lock")
     if vacuum_support:
-        discovery.load_platform(hass, "vacuum", DOMAIN, {}, config)
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(discovery.load_platform(hass, "vacuum", DOMAIN, {}, config))
         _LOGGER.debug("Starting WyzeApi vacuum")
     else:
         _LOGGER.error("WyzeApi authenticated but could not find any devices.")
 
     return True
+
+
