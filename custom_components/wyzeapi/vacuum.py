@@ -33,7 +33,7 @@ SUPPORT_WYZEVAC = (
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the Wyze vacuums."""
-    wyzeapi_platform: WyzeProvider = hass.data[DOMAIN]["wyzeapi_platform"]
+    wyzeapi_platform: WyzeProvider = hass.data[DOMAIN]["wyzeapi_provider"]
 
     vacuums = []
     for vacuum in wyzeapi_platform.vacuum.list():
