@@ -17,6 +17,7 @@ from . import DOMAIN
 from .smartbridge.providers.wyze import WyzeProvider
 from .smartbridge.providers.wyze.devices import WyzeVacuum
 from .smartbridge.interfaces.devices import VacuumMode
+from .smartbridge.interfaces.devices import VacuumSuction
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -44,11 +45,11 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
 
 class HAWyzeVacuum(VacuumEntity):
-    def start_pause(self, **kwargs):
-        raise NotImplementedError()
-
     def __init__(self, smartbridge_vacuum):
         self.vacuum: WyzeVacuum = smartbridge_vacuum
+
+    def start_pause(self, **kwargs):
+        raise NotImplementedError()
 
     def turn_on(self, **kwargs):
         self.vacuum.clean()
@@ -62,7 +63,7 @@ class HAWyzeVacuum(VacuumEntity):
 
     @property
     def fan_speed_list(self):
-        return self.vacuum._suction_levels
+        return [VacuumSuction.QUIET, VacuumSuction.STANDARD, VacuumSuction.STRONG]
 
     def stop(self, **kwargs):
         self.vacuum.dock()
