@@ -45,6 +45,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
 
 class HAWyzeVacuum(VacuumEntity):
+    _fan_speed_list = {VacuumSuction.QUIET[1]: VacuumSuction.QUIET,
+                       VacuumSuction.STANDARD[1]: VacuumSuction.STANDARD,
+                       VacuumSuction.STRONG[1]: VacuumSuction.STRONG}
+
     def __init__(self, smartbridge_vacuum):
         self.vacuum: WyzeVacuum = smartbridge_vacuum
 
@@ -63,7 +67,11 @@ class HAWyzeVacuum(VacuumEntity):
 
     @property
     def fan_speed_list(self):
-        return [VacuumSuction.QUIET, VacuumSuction.STANDARD, VacuumSuction.STRONG]
+        fan_speeds = []
+        for fan_speed in self._fan_speed_list.keys():
+            fan_speeds.append(fan_speed)
+
+        return fan_speeds
 
     def stop(self, **kwargs):
         self.vacuum.dock()
@@ -78,7 +86,7 @@ class HAWyzeVacuum(VacuumEntity):
         raise NotImplementedError()
 
     def set_fan_speed(self, fan_speed, **kwargs):
-        self.vacuum.suction_level = fan_speed
+        self.vacuum.suction_level = self._fan_speed_list.get(fan_speed)
 
     def send_command(self, command, params=None, **kwargs):
         raise NotImplementedError()
