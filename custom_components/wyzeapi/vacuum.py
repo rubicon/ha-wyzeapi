@@ -45,9 +45,9 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
 
 class HAWyzeVacuum(VacuumEntity):
-    _fan_speed_list = {VacuumSuction.QUIET[1]: VacuumSuction.QUIET,
-                       VacuumSuction.STANDARD[1]: VacuumSuction.STANDARD,
-                       VacuumSuction.STRONG[1]: VacuumSuction.STRONG}
+    _fan_speed_list = {VacuumSuction.QUIET.label: VacuumSuction.QUIET,
+                       VacuumSuction.STANDARD.label: VacuumSuction.STANDARD,
+                       VacuumSuction.STRONG.label: VacuumSuction.STRONG}
 
     def __init__(self, smartbridge_vacuum):
         self.vacuum: WyzeVacuum = smartbridge_vacuum
