@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2021 Joshua Mulliken <joshua@mulliken.net>
+SPDX-FileCopyrightText: 2021 Katie Mulliken <katie@mulliken.net>
 
 SPDX-License-Identifier: Apache-2.0
 -->
@@ -8,14 +8,14 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Supported Versions
 
-| Version   | Supported          |
-| --------- | ------------------ |
-| 2021.5.6  | :white_check_mark: |
-| < 2021.5.6| :x:                |
+| Version | Supported |
+|--|--------------------|
+| 0.1.X | :white_check_mark: |
+| all_other_versions | :x: |
 
 ## Reporting a Vulnerability
 
-Please send an email to `josh.mulliken (at) hey (dot) com` with the title `[vulnerability][ha-wyzeapi] <Title of Issue>`
+Please send an email to `katie (at) mulliken (dot) net` with the title `[vulnerability][ha-wyzeapi] <Title of Issue>`
 .
 
 ### Email Contents
@@ -28,7 +28,7 @@ Please send an email to `josh.mulliken (at) hey (dot) com` with the title `[vuln
 I will attempt to get back to you as soon as possible and will attempt to work on the following time table:
 
 | Risk       | Turnaround              |
-| ---------- | ----------------------- |
+|------------|-------------------------|
 | Critical   | 2 Days                  |
 | High       | 7 Days                  |
 | Medium     | 2 Weeks                 |

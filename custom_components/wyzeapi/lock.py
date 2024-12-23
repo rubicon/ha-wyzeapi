@@ -1,21 +1,27 @@
 #!/usr/bin/python3
 
 """Platform for light integration."""
-import logging
 from abc import ABC
 from datetime import timedelta
-from typing import Callable, List, Any
+import logging
+from typing import Any, Callable, List
+from aiohttp.client_exceptions import ClientConnectionError
+
+from wyzeapy import LockService, Wyzeapy
+from wyzeapy.services.lock_service import Lock
+from wyzeapy.types import DeviceTypes
+from wyzeapy.exceptions import AccessTokenError, ParameterError, UnknownApiError
 
 import homeassistant.components.lock
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_ATTRIBUTION
-from homeassistant.core import HomeAssistant
-from wyzeapy import Wyzeapy, LockService
-from wyzeapy.services.lock_service import Lock
-from wyzeapy.types import DeviceTypes
-from .token_manager import token_exception_handler
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.dispatcher import async_dispatcher_send
+from homeassistant.helpers import device_registry as dr
+from homeassistant.exceptions import HomeAssistantError
 
-from .const import DOMAIN, CONF_CLIENT
+from .const import CONF_CLIENT, DOMAIN, LOCK_UPDATED
+from .token_manager import token_exception_handler
 
 _LOGGER = logging.getLogger(__name__)
 ATTRIBUTION = "Data provided by Wyze"
@@ -65,7 +71,13 @@ class WyzeLock(homeassistant.components.lock.LockEntity, ABC):
             "identifiers": {
                 (DOMAIN, self._lock.mac)
             },
-            "name": self.name,
+            "name": self._lock.nickname,
+            "connections": {
+                (
+                    dr.CONNECTION_NETWORK_MAC,
+                    self._lock.mac,
+                )
+            },
             "manufacturer": "WyzeLabs",
             "model": self._lock.product_model
         }
@@ -78,20 +90,32 @@ class WyzeLock(homeassistant.components.lock.LockEntity, ABC):
 
     @property
     def should_poll(self) -> bool:
-        return True
+        return False
 
     @token_exception_handler
     async def async_lock(self, **kwargs):
         _LOGGER.debug("Turning on lock")
-        await self._lock_service.lock(self._lock)
-
-        self._lock.unlocked = False
+        try:
+            await self._lock_service.lock(self._lock)
+        except (AccessTokenError, ParameterError, UnknownApiError) as err:
+            raise HomeAssistantError(f"Wyze returned an error: {err.args}") from err
+        except ClientConnectionError as err:
+            raise HomeAssistantError(err) from err
+        else:
+            self._lock.unlocked = False
+            self.async_schedule_update_ha_state()
 
     @token_exception_handler
     async def async_unlock(self, **kwargs):
-        await self._lock_service.unlock(self._lock)
-
-        self._lock.unlocked = True
+        try:
+            await self._lock_service.unlock(self._lock)
+        except (AccessTokenError, ParameterError, UnknownApiError) as err:
+            raise HomeAssistantError(f"Wyze returned an error: {err.args}") from err
+        except ClientConnectionError as err:
+            raise HomeAssistantError(err) from err
+        else:
+            self._lock.unlocked = True
+            self.async_schedule_update_ha_state()
 
     @property
     def is_locked(self):
@@ -112,24 +136,20 @@ class WyzeLock(homeassistant.components.lock.LockEntity, ABC):
         return self._lock.available
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Return device attributes of the entity."""
         dev_info = {
             ATTR_ATTRIBUTION: ATTRIBUTION,
-            "state": self.state,
-            "available": self.available,
             "door_open": self._lock.door_open,
-            "device_model": self._lock.product_model,
-            "mac": self.unique_id
         }
 
         # Add the lock battery value if it exists
         if self._lock.raw_dict.get("power"):
-            dev_info["lock battery"] = str(self._lock.raw_dict.get("power")) + "%"
+            dev_info["lock_battery"] = str(self._lock.raw_dict.get("power"))
 
         # Add the keypad's battery value if it exists
         if self._lock.raw_dict.get("keypad", {}).get("power"):
-            dev_info["keypad battery"] = str(self._lock.raw_dict.get("keypad", {}).get("power")) + "%"
+            dev_info["keypad_battery"] = str(self._lock.raw_dict.get("keypad", {}).get("power"))
 
         return dev_info
 
@@ -148,3 +168,24 @@ class WyzeLock(homeassistant.components.lock.LockEntity, ABC):
             self._out_of_sync_count = 0
         else:
             self._out_of_sync_count += 1
+
+    @callback
+    def async_update_callback(self, lock: Lock):
+        """Update the switch's state."""
+        self._lock = lock
+        async_dispatcher_send(
+            self.hass,
+            f"{LOCK_UPDATED}-{self._lock.mac}",
+            lock,
+        )
+        self.async_schedule_update_ha_state()
+
+    async def async_added_to_hass(self) -> None:
+        """Subscribe to update events."""
+        self._lock.callback_function = self.async_update_callback
+        self._lock_service.register_updater(self._lock, 10)
+        await self._lock_service.start_update_manager()
+        return await super().async_added_to_hass()
+
+    async def async_will_remove_from_hass(self) -> None:
+        self._lock_service.unregister_updater(self._lock)
